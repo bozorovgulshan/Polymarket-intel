@@ -7,7 +7,6 @@ const fmt = (n) => {
 const short = (a) => a ? a.slice(0,6) + "..." + a.slice(-4) : "—";
 
 let traders = [];
-let selected = null;
 
 async function load() {
   document.getElementById("loading").style.display = "block";
@@ -18,10 +17,10 @@ async function load() {
     if (!res.ok) throw new Error("Server error " + res.status);
     const raw = await res.json();
     const list = (raw.data || raw || []).slice(0, 30);
-traders = list.map((u, i) => ({
+    traders = list.map((u, i) => ({
       rank: i + 1,
       address: u.proxyWallet || u.address || "—",
-      displayName: u.userName || u.pseudonym || u.name || null,
+      displayName: u.userName || u.pseudonym || null,
       profit: Number(u.pnl || u.profit || 0),
       volume: Number(u.vol || u.volume || 0),
       verified: !!u.verifiedBadge,
@@ -40,20 +39,20 @@ function render() {
   document.getElementById("content").style.display = "block";
   const stats = document.getElementById("stats");
   const totalProfit = traders.reduce((s,t) => s + t.profit, 0);
-  const avgWin = traders.reduce((s,t) => s + t.winRate, 0) / (traders.length || 1);
+  const totalVolume = traders.reduce((s,t) => s + t.volume, 0);
   stats.innerHTML = `
     <div class="stat"><div class="stat-label">WHALES</div><div class="stat-value">${traders.length}</div></div>
     <div class="stat"><div class="stat-label">TOTAL PROFIT</div><div class="stat-value">${fmt(totalProfit)}</div></div>
-    <div class="stat"><div class="stat-label">AVG WIN RATE</div><div class="stat-value">${avgWin.toFixed(1)}%</div></div>
+    <div class="stat"><div class="stat-label">TOTAL VOLUME</div><div class="stat-value">${fmt(totalVolume)}</div></div>
   `;
   const container = document.getElementById("traders");
   container.innerHTML = traders.map(t => `
     <div class="trader" onclick="select('${t.address}')">
       <span class="rank ${t.rank<=3?'gold':''}">${t.rank<=3?['🥇','🥈','🥉'][t.rank-1]:'#'+t.rank}</span>
-      <span class="wallet">${short(t.address)}${t.displayName?'<br><small>'+t.displayName+'</small>':''}</span>
+      <span class="wallet">${t.displayName ? '<strong style="color:#e8eaf0">'+t.displayName+'</strong>'+(t.verified?' ✓':'')+'<br>' : ''}<small>${short(t.address)}</small></span>
       <span class="profit ${t.profit>=0?'pos':'neg'}">${t.profit>=0?'+':''}${fmt(t.profit)}</span>
-      <span class="winrate ${t.winRate>=60?'high':t.winRate>=45?'mid':'low'}">${t.winRate.toFixed(1)}%</span>
-      <span class="trades">${t.trades.toLocaleString()}</span>
+      <span style="color:#7a8fa8">${fmt(t.volume)}</span>
+      <span style="color:#7a8fa8">${t.xHandle?'@'+t.xHandle:'—'}</span>
     </div>
     <div id="pos-${t.address}" class="positions" style="display:none"></div>
   `).join("");
@@ -71,7 +70,7 @@ async function select(address) {
     const positions = (raw.data || raw || []).slice(0, 20);
     if (!positions.length) { box.innerHTML = '<div style="color:#4a6080;text-align:center;padding:20px">No open positions</div>'; return; }
     box.innerHTML = positions.map(p => {
-      const side = p.outcome || (p.currentValue > p.avgPrice ? "YES" : "NO");
+      const side = p.outcome || "YES";
       const price = Number(p.curPrice || p.avgPrice || 0);
       const size = Number(p.currentValue || p.size || 0);
       const pnl = Number(p.cashPnl || p.pnl || 0);
