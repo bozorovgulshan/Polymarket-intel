@@ -1,0 +1,38 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #050810; color: #e8eaf0; font-family: monospace; min-height: 100vh; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #0d1f35; }
+.logo { font-size: 20px; font-weight: bold; color: #00b4ff; letter-spacing: 0.1em; }
+.logo span { color: #ff4d6d; }
+.status { font-size: 11px; color: #00ff87; display: flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff87; animation: pulse 2s infinite; }
+@keyframes pulse { 50% { opacity: 0.4; } }
+.stats { display: flex; border-bottom: 1px solid #0d1f35; flex-wrap: wrap; }
+.stat { flex: 1; padding: 12px 16px; border-right: 1px solid #0d1f35; min-width: 140px; }
+.stat-label { font-size: 9px; color: #4a6080; letter-spacing: 0.1em; margin-bottom: 4px; }
+.stat-value { font-size: 15px; color: #e8eaf0; }
+.loading, .error { padding: 60px 20px; text-align: center; }
+.spinner { font-size: 20px; color: #00b4ff; letter-spacing: 0.2em; }
+.error h2 { color: #ff4d6d; margin-bottom: 10px; }
+.error p { color: #7a8fa8; font-size: 12px; margin-bottom: 20px; }
+.error button { background: transparent; border: 1px solid #00b4ff; color: #00b4ff; padding: 8px 20px; cursor: pointer; font-family: inherit; }
+.table-header { display: grid; grid-template-columns: 40px 1fr 100px 80px 70px; padding: 10px 16px; border-bottom: 1px solid #0d1f35; font-size: 9px; color: #4a6080; letter-spacing: 0.1em; }
+.trader { display: grid; grid-template-columns: 40px 1fr 100px 80px 70px; padding: 12px 16px; border-bottom: 1px solid #080e1c; font-size: 12px; align-items: center; cursor: pointer; transition: background 0.15s; }
+.trader:hover, .trader.active { background: rgba(0, 180, 255, 0.08); }
+.rank { color: #4a6080; }
+.rank.gold { color: #ffd700; }
+.wallet { color: #7ab8e8; font-size: 11px; }
+.profit { font-weight: 500; }
+.profit.pos { color: #00ff87; }
+.profit.neg { color: #ff4d6d; }
+.winrate.high { color: #00ff87; }
+.winrate.mid { color: #ffd700; }
+.winrate.low { color: #ff4d6d; }
+.trades { color: #7a8fa8; }
+.positions { background: rgba(0, 180, 255, 0.03); padding: 16px; border-top: 1px solid #0d1f35; }
+.position { background: rgba(255, 255, 255, 0.02); border: 1px solid #0d1f35; padding: 12px; margin-bottom: 8px; border-radius: 4px; }
+.position-title { font-size: 11px; color: #c8d0e0; margin-bottom: 6px; line-height: 1.4; }
+.position-meta { display: flex; gap: 12px; font-size: 10px; color: #7a8fa8; }
+.pill { padding: 2px 8px; border-radius: 3px; font-size: 10px; }
+.pill.yes { background: rgba(0, 255, 135, 0.15); color: #00ff87; }
+.pill.no { background: rgba(255, 77, 109, 0.15); color: #ff4d6d; }
+.copy-btn { background: rgba(0, 180, 255, 0.1); border: 1px solid rgba(0, 180, 255, 0.3); color: #00b4ff; padding: 4px 10px; margin-top: 8px; border-radius: 3px; font-size: 10px; text-decoration: none; display: inline-block; }
