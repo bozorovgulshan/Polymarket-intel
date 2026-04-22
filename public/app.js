@@ -18,13 +18,14 @@ async function load() {
     if (!res.ok) throw new Error("Server error " + res.status);
     const raw = await res.json();
     const list = (raw.data || raw || []).slice(0, 30);
-    traders = list.map((u, i) => ({
+traders = list.map((u, i) => ({
       rank: i + 1,
-      address: u.proxyWallet || u.name || u.address || "—",
-      displayName: u.pseudonym || u.name || null,
-      profit: Number(u.profit || u.pnl || 0),
-      winRate: Number(u.winRate || 0) * (u.winRate > 1 ? 1 : 100),
-      trades: Number(u.tradesCount || u.numTrades || 0),
+      address: u.proxyWallet || u.address || "—",
+      displayName: u.userName || u.pseudonym || u.name || null,
+      profit: Number(u.pnl || u.profit || 0),
+      volume: Number(u.vol || u.volume || 0),
+      verified: !!u.verifiedBadge,
+      xHandle: u.xUsername || null,
     }));
     render();
   } catch (e) {
