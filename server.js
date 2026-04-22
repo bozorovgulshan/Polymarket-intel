@@ -17,21 +17,14 @@ const fetchJson = async (url) => {
 };
 
 app.get("/api/leaderboard", async (req, res) => {
-  const endpoints = [
-    "https://lb-api.polymarket.com/profit?window=all&limit=30",
-    "https://data-api.polymarket.com/leaderboard?window=allTime&limit=30",
-    "https://polymarket.com/api/leaderboard?window=all&limit=30",
-  ];
-  for (const url of endpoints) {
-    try {
-      const data = await fetchJson(url);
-      console.log("Success with:", url);
-      return res.json(data);
-    } catch (e) {
-      console.log("Failed:", url, e.message);
-    }
+  try {
+    const data = await fetchJson("https://data-api.polymarket.com/v1/leaderboard");
+    console.log("Got leaderboard, count:", Array.isArray(data) ? data.length : "not array");
+    res.json(data);
+  } catch (e) {
+    console.log("Error:", e.message);
+    res.status(502).json({ error: e.message });
   }
-  res.status(502).json({ error: "All Polymarket endpoints failed" });
 });
 
 app.get("/api/positions/:address", async (req, res) => {
